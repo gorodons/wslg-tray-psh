@@ -129,6 +129,19 @@ function Get-AppIcon([string]$Path) {
   return [Drawing.SystemIcons]::Application.Clone()
 }
 
+function Get-ControlIcon {
+  try {
+    $icon = [Drawing.Icon]::ExtractAssociatedIcon($wslExe)
+    if ($icon) {
+      return $icon.Clone()
+    }
+  }
+  catch {
+    Write-ProxyLog "Unable to load WSL icon: $($_.Exception.Message)"
+  }
+  return [Drawing.SystemIcons]::Application.Clone()
+}
+
 function Stop-LinuxProcess([int]$ProcessId) {
   try {
     $null = Invoke-ProcessCapture $wslExe @("-d", $Distro, "--", "kill", "-TERM", "$ProcessId")
@@ -262,7 +275,7 @@ function Stop-Proxy {
   [Windows.Forms.Application]::Exit()
 }
 
-$controlIcon = [Drawing.SystemIcons]::Application.Clone()
+$controlIcon = Get-ControlIcon
 $controlNotify = [Windows.Forms.NotifyIcon]::new()
 $controlNotify.Icon = $controlIcon
 $controlNotify.Text = "WSL Tray Proxy"

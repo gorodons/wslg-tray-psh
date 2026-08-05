@@ -34,13 +34,16 @@ The installer copies the proxy to:
 %LOCALAPPDATA%\WSLTrayProxy\WSLTrayProxy.ps1
 ```
 
-and creates this startup shortcut:
+and creates shortcuts for autostart and manual launch from Start:
 
 ```text
 %APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\WSL Tray Proxy.lnk
+%APPDATA%\Microsoft\Windows\Start Menu\Programs\WSL Tray Proxy.lnk
 ```
 
-It then starts the proxy immediately. A named mutex prevents duplicate instances.
+Both shortcuts use the system WSL icon. The proxy control icon in the notification
+area uses the same icon. The installer then starts the proxy immediately. A named
+mutex prevents duplicate instances.
 
 ## Run manually
 
@@ -65,6 +68,7 @@ Exit the proxy from its control icon, then remove:
 
 ```powershell
 Remove-Item "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\WSL Tray Proxy.lnk" -ErrorAction SilentlyContinue
+Remove-Item "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\WSL Tray Proxy.lnk" -ErrorAction SilentlyContinue
 Remove-Item "$env:LOCALAPPDATA\WSLTrayProxy" -Recurse -Force
 ```
 
